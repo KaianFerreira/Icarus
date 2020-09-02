@@ -49,7 +49,7 @@
           {
             title: 'Teste',
             subtitle: 'Outro teste',
-            text: 'AAAAAAAAAAAAAAAAAAAAA',
+            text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
             user: 'Kaian Ferreira'
           }
         ]
