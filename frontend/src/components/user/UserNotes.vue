@@ -8,16 +8,19 @@
         label="Search"
         solo-inverted
         v-model="search"
+        append-outer-icon="mdi-plus"
+        @click:append-outer="$router.push('/user/note/new')"
       ></v-text-field>
       <div class="cards">
         <v-row class="card"
           v-for="(card, i) in filteredItems" :key="i"
+          link
+          @click="$router.push(`/user/note/${card.id}`)"
         >
           <v-col>
             <v-card
-              color="teal"
+              :color="card.signed ? 'teal' : '#385F73'"
               dark
-              link
             >
               <v-card-title class="headline">{{card.title}}</v-card-title>
 
@@ -37,9 +40,11 @@
 </template>
 
 <script>
- import { getAllAssigned } from '../../api/note'
+  import { getUserNotes } from '../../api/note'
+  import { mapState } from 'vuex'
   export default {
     computed: {
+      ...mapState(['user']),
       filteredItems () {
         return this.cards.filter(x => Object.keys(x).some(key => String(x[key]).toUpperCase().includes(this.search.toUpperCase())))
       }
@@ -51,7 +56,7 @@
       }
     },
     async mounted () {
-      this.cards = await getAllAssigned ()
+      this.cards = await getUserNotes(this.user.id)
     }
   }
 </script>

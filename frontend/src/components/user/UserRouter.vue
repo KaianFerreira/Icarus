@@ -15,7 +15,7 @@
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title>{{ user.name }}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -78,6 +78,11 @@
           title: 'Perfil',
           path: '/user/profile',
           icon: 'mdi-account-circle'
+        },
+        {
+          title: 'Notas',
+          path: '/user/note',
+          icon: 'mdi-note'
         }
       ],
     }),
