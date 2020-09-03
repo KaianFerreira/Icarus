@@ -5,11 +5,11 @@ module.exports = {
   mode: 'production',
   target: 'node',
   entry: {
-    app: ['./src/server.js']
+    app: ['./src/server.mjs']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'server.js'
+    filename: 'server.mjs'
   },
   externals: [nodeExternals()],
 }
