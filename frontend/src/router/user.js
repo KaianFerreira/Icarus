@@ -12,6 +12,17 @@ export default [
         path: 'profile',
         name: 'userProfile',
         component: () => import(/* webpackChunkName: "user" */ '../components/user/UserProfile.vue')
+      },
+      {
+        path: 'note',
+        name: 'userNotes',
+        component: () => import(/* webpackChunkName: "user" */ '../components/user/UserNotes.vue')
+      },
+      {
+        path: 'note/:id',
+        name: 'userNote',
+        component: () => import(/* webpackChunkName: "user" */ '../components/user/UserNote.vue'),
+        props: true
       }
     ]
   }
