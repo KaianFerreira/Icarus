@@ -1,96 +1,100 @@
 <template>
-  <v-app>
-    <v-main>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
+  <section class="d-flex" style="height: 100%">
+    <v-navigation-drawer
+      class="menu" :class="{ 'open' : mini }"
+      @click="mini = !mini"
+      v-model="drawer"
+      fixed
+      mini-variant-width="56px"
+      permanent
+      color="blue"
+      dark
+      stateless
+    >
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-title>John Leider</v-list-item-title>
+      </v-list-item>
+
+      <v-divider></v-divider>
+      <v-list dense>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+          @click="$router.push(item.path)"
         >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <template v-slot:append style="width: 100%">
+        <div class="d-flex justify-space-between">
+          <v-list-item class="btn-open px-2" :class="{'button-close' : mini}">
+            <v-btn
+              icon
+              @click.stop="mini = !mini"
+            >
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+          </v-list-item>
+          <v-btn class="align-self-center"
+            icon
+            @click.stop="$store.dispatch('signOut')"
           >
-            <v-card class="elevation-5">
-              <v-toolbar
-                color="indigo"
-                dark
-                flat
-              >
-                <v-toolbar-title>Icarus</v-toolbar-title>
-                <v-spacer></v-spacer>
-
-              </v-toolbar>
-              <v-card-text>
-                <v-form>
-                  <v-text-field
-                    label="Login"
-                    name="login"
-                    prepend-icon="mdi-account"
-                    type="text"
-                    v-model="login"
-                    :readonly="loading"
-                    :error="errors.indexOf('invalidCredentials') > 1"
-                  ></v-text-field>
-                  <v-text-field
-                    id="password"
-                    label="Senha"
-                    name="password"
-                    prepend-icon="mdi-lock"
-                    type="password"
-                    v-model="password"
-                    :readonly="loading"
-                    :error="errors.indexOf('invalidCredentials') > 1"
-                  ></v-text-field>
-                  <v-text-field
-                    v-if="errors.length > 0"
-                    name="error"
-                    type="text"
-                    :error="errors.indexOf('invalidCredentials') > 1 || errors.indexOf('internal error')"
-                    :messages="errors.indexOf('invalidCredentials') > 1 ? 'Login ou senha inválido' : errors.indexOf('internal error') > 1 ? 'Ocorreu um erro' : ''"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn :disabled="loading" outlined color="secondary" @click="$router.push('/signon')">Cadastro</v-btn>
-                <v-btn :loading="loading" color="primary" @click="save">Login</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+    <router-view></router-view>
+  </section>
 </template>
-
 <script>
   export default {
-    data () {
-      return {
-        login: null,
-        password: null,
-        loading: false,
-        errors: []
-      }
-    },
-    methods: {
-      async save () {
-        this.loading = true
-        try {
-          console.log('here')
-        } catch (error) {
-          const data = error.response ? error.response.data : {}
-          if (data.error === 'Validation error') {
-            this.errors = ['invalidCredentials']
-          }
-          console.error(error)
+    data: () => ({
+      drawer: null,
+      mini: false,
+      items: [
+        { 
+          title: 'Home',
+          path: '/admin',
+          icon: 'mdi-home'
+        },
+        {
+          title: 'Notas assinadas',
+          path: '/admin/note',
+          icon: 'mdi-note'
         }
-        this.loading = false
-      }
-    }
+      ],
+    })
   }
 </script>
+
+<style lang="scss" scoped>
+  .btn-open {
+    width: 52px;
+  }
+  .button-close {
+    button {
+      transform: rotate(180deg);
+    }
+  }
+  .menu {
+    width: 56px !important;
+  }
+  .open {
+    width: 100% !important;
+  }
+  @media screen and (min-width: 768px) {
+    .open {
+      width: 250px !important;
+    }
+  }
+</style>

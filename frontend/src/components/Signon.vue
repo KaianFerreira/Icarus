@@ -144,7 +144,7 @@
             this.birthDate,
             this.loading
           )
-          this.$router.push('/signon')
+          this.$router.push('/signin')
         } catch (error) {
           const data = error.response ? error.response.data : {}
           console.error(error)
