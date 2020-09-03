@@ -29,7 +29,9 @@ const exist = async (login, id = null) => {
 
 const get = async id => {
   return knex('user')
+  .leftJoin('user_details', 'user.id', 'user_details.user')
   .where('user.id', id)
+  .select('user.*', 'user_details.name')
   .first()
 }
 

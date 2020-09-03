@@ -23,9 +23,6 @@ const requireAuth = (role = null) => async (req, res, next) => {
     if (token) {
       const decoded = await decodeJWT(token)
       const user = await getUser(decoded.id)
-      if (req.headers.office != null) {
-        user.officeId = Number(req.headers.office)
-      }
       if (!user) { return res.status(401).send({ error: 'User not found' }) }
       if (!user.active) { return res.status(401).send({ error: 'User disabled' }) }
       if (role && user.role !== role) { return res.status(401).send({ error: 'Permiission denied' }) }

@@ -71,7 +71,7 @@ router.post('/signin', async (req, res) => {
 // Sign on user
 router.post('/signon', async (req, res) => {
   try {
-    console.log('REQ /api/auth/signon')
+    console.log('REQ /auth/signon')
     // Validate request
     const schema = Joi.object().options({ abortEarly: false }).keys({
       login: Joi.string().email().required(),
@@ -91,7 +91,7 @@ router.post('/signon', async (req, res) => {
     const check = await exist(value.login)
     if (check) { return res.status(400).send({ error: 'User already exists' }) }
     // Create user
-    const user = await create(
+    await create(
       value.login,
       value.password,
       value.name,
@@ -101,8 +101,7 @@ router.post('/signon', async (req, res) => {
       value.role
     )
     // Generate sign token
-    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
-    return res.send({ token, user })
+    return res.send(true)
   } catch (error) {
     console.error(error, {
       level: error.level,
@@ -117,7 +116,7 @@ router.post('/signon', async (req, res) => {
 // Get user data and renew JWT token
 router.get('/user', requireAuth(), (req, res) => {
   try {
-    console.log('REQ /api/auth/user')
+    console.log('REQ /auth/user')
     const user = req.user
     const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
     return res.send({ token, user })
@@ -131,21 +130,5 @@ router.get('/user', requireAuth(), (req, res) => {
     return res.status(400).send({ error: 'Internal error' })
   }
 })
-
-// Get user data and renew JWT token
-router.get('/', requireAuth(), async (req, res) => {
-  try {
-    console.info('GET /api/auth')
-    const user = req.user
-    user.profile = await getByUser(req.user.id)
-    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES })
-    return res.send({ token, user })
-  } catch (error) {
-    logger.error(error)
-    return res.status(400).send({ error: 'internal' })
-  }
-})
-
-
 
 export default router
