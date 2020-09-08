@@ -8,6 +8,7 @@ dotenv.config()
 
 import auth from './routes/config/auth/routes.mjs'
 import note from './routes/note/routes.mjs'
+import user from './routes/user/routes.mjs'
 
 console.log(`[${new Date().toLocaleString('pt-br')} Starting Icarus]`)
 const app = express()
@@ -21,5 +22,6 @@ const router = express.Router()
 //routes
 router.use('/auth', auth)
 router.use('/note', note)
+router.use('/user', user)
 app.use('/', router)
 app.listen(process.env.PORT || 3000, () => console.log(`Server listening on port ${process.env.PORT || 3000}`))
