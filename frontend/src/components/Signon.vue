@@ -1,9 +1,10 @@
 <template>
   <v-app id="signon" key="signon">
     <v-main>
-      <v-container
-        class="fill-height"
+      <div
+        class="fill-height d-flex align-center"
         fluid
+        style="padding:10px"
       >
         <v-row
           align="center"
@@ -26,7 +27,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-container>
+                  <div>
                     <v-row>
                       <v-col>
                         <v-text-field
@@ -100,7 +101,7 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>                    
-                  </v-container>
+                  </div>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -111,7 +112,7 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>

@@ -1,9 +1,10 @@
 <template>
   <v-app>
     <v-main>
-      <v-container
-        class="fill-height"
+      <div
+        class="fill-height d-flex align-center"
         fluid
+        style="padding:10px"
       >
         <v-row
           align="center"
@@ -62,7 +63,7 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
