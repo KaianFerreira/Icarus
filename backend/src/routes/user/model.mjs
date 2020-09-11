@@ -70,7 +70,6 @@ const update = async (
       birthDate,
     }).where('id', id)
     .returning(['id', 'user'])
-    console.log(userDetails)
     const user = await knex('user').transacting(trx).update({
       login,
       password: pass,
