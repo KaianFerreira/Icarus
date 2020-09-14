@@ -28,13 +28,13 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    label="Login"
+                    label="Email"
                     name="login"
-                    prepend-icon="mdi-account"
                     type="text"
+                    prepend-icon="mdi-account"
                     v-model="login"
                     :readonly="loading"
-                    :error="errors.indexOf('invalidCredentials') > 1"
+                    :error="error === 'invalidCredentials'"
                   ></v-text-field>
                   <v-text-field
                     id="password"
@@ -44,15 +44,12 @@
                     type="password"
                     v-model="password"
                     :readonly="loading"
-                    :error="errors.indexOf('invalidCredentials') > 1"
+                    :error="error === 'invalidCredentials'"
                   ></v-text-field>
-                  <v-text-field
-                    v-if="errors.length > 0"
-                    name="error"
-                    type="text"
-                    :error="errors.indexOf('invalidCredentials') > 1 || errors.indexOf('internal error')"
-                    :messages="errors.indexOf('invalidCredentials') > 1 ? 'Login ou senha inválido' : errors.indexOf('internal error') > 1 ? 'Ocorreu um erro' : ''"
-                  ></v-text-field>
+                  <v-input
+                    :error-messages="error === 'invalidCredentials' ? 
+                      ['Login ou senha não conhecidem'] : error"
+                  ></v-input>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -76,19 +73,22 @@
         login: null,
         password: null,
         loading: false,
-        errors: []
+        error: null
       }
     },
     methods: {
       async save () {
+        this.error = []
         this.loading = true
         try {
           const data = await signIn(this.login, this.password)
           this.$store.dispatch('signIn', data)
         } catch (error) {
           const data = error.response ? error.response.data : {}
-          if (data.error === 'Validation error') {
-            this.errors = ['invalidCredentials']
+          if (data.error === 'Invalid login or password') {
+            this.error = 'invalidCredentials'
+          } else {
+            this.error = 'Internal error'
           }
           console.error(error)
         }

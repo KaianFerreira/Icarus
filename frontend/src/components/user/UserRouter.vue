@@ -1,5 +1,5 @@
 <template>
-  <section class="d-flex" style="height: 100%">
+  <section class="d-flex" style="height: 100%" v-if="loaded">
     <v-navigation-drawer
       class="menu" :class="{ 'open' : mini }"
       @click="mini = !mini"
@@ -13,7 +13,7 @@
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-img :src="user.photo"></v-img>
         </v-list-item-avatar>
         <v-list-item-title>{{ user.name }}</v-list-item-title>
       </v-list-item>
@@ -63,7 +63,7 @@
       source: String,
     },
     computed: {
-      ...mapState(['user'])
+      ...mapState(['user', 'loaded'])
     },
     data: () => ({
       drawer: null,

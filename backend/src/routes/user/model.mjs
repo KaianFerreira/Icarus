@@ -16,7 +16,9 @@ const getAll = async (active = true ) => {
 
 const get = async (id) => {
   return knex('user_details')
-    .where('id', id)
+    .leftJoin('user', 'user.id', 'user_details.user')
+    .select('user_details.*', 'user.login as userLogin')
+    .where('user', id)
     .first()
 }
 
@@ -60,25 +62,35 @@ const update = async (
   birthDate,
   role = 'user',
   active
-) => {
-  const { pass, key } = generateHash(password)
-  return knex.transaction(async trx => {
-    const userDetails = await knex('user_details').transacting(trx).update({
-      name,
+  ) => {
+    return knex.transaction(async trx => {
+      const userDetails = await knex('user_details').transacting(trx).update({
+        name,
       fullName,
       registerNumber,
       birthDate,
     }).where('id', id)
     .returning(['id', 'user'])
-    const user = await knex('user').transacting(trx).update({
-      login,
-      password: pass,
-      hash: key,
-      role: role,
-      active
-    })
-    .where('id', userDetails[0].user).returning(['id', 'login', 'role', 'active'])
-    return user[0].id
+    if (password) {
+      const { pass, key } = generateHash(password)
+      const user = await knex('user').transacting(trx).update({
+        login,
+        password: pass,
+        hash: key,
+        role: role,
+        active
+      })
+      .where('id', userDetails[0].user).returning(['id', 'login', 'role', 'active'])
+      return user[0].id
+    } else {
+      const user = await knex('user').transacting(trx).update({
+        login,
+        role: role,
+        active
+      })
+      .where('id', userDetails[0].user).returning(['id', 'login', 'role', 'active'])
+      return user[0].id
+    }
   })
 }
 

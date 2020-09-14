@@ -24,4 +24,6 @@ router.use('/auth', auth)
 router.use('/note', note)
 router.use('/user', user)
 app.use('/', router)
+
+app.use('/data', express.static(process.env.FOLDER_DATA))
 app.listen(process.env.PORT || 3000, () => console.log(`Server listening on port ${process.env.PORT || 3000}`))

@@ -2,6 +2,7 @@ import express from 'express'
 import Joi from 'joi'
 import multer from 'multer'
 import fs from 'fs'
+import path from 'path'
 
 import requireAuth from '../config/auth/requireAuth.mjs'
 import {
@@ -22,12 +23,12 @@ const uploadPhoto = (file, id) => {
     if (!fs.existsSync(`${process.env.FOLDER_DATA}/${id}`)) {
       fs.mkdirSync(`${process.env.FOLDER_DATA}/${id}`, { recursive: true })
     }
-    // If logo exists
-    if (fs.existsSync(`${process.env.FOLDER_DATA}/${id}/logo.jpg`)) {
-      fs.unlinkSync(`${process.env.FOLDER_DATA}/${id}/logo.jpg`)
+    // If photo exists
+    if (fs.existsSync(`${process.env.FOLDER_DATA}/${id}/profile.jpg`)) {
+      fs.unlinkSync(`${process.env.FOLDER_DATA}/${id}/profile.jpg`)
     }
     // Copy temp image to business folder
-    fs.copyFileSync(`${process.env.FOLDER_DATA}/tmp/${file.filename}`, `${process.env.FOLDER_DATA}/${id}/logo.jpg`)
+    fs.copyFileSync(`${process.env.FOLDER_DATA}/tmp/${file.filename}`, `${process.env.FOLDER_DATA}/${id}/profile.jpg`)
     fs.unlinkSync(`${process.env.FOLDER_DATA}/tmp/${file.filename}`)
   }
 }
@@ -47,7 +48,6 @@ router.get('/', requireAuth(), async (req, res) => {
 router.get('/:id', requireAuth(), async (req, res) => {
   try {
     console.log('GET /user/:id')
-
     const schema = Joi.object().keys({
       id: Joi.number().integer().required()
     })
@@ -66,7 +66,7 @@ router.get('/:id', requireAuth(), async (req, res) => {
   }
 })
 
-router.post('/', requireAuth('admin'), upload.single('file'), async (req, res) => {
+router.post('/', requireAuth('admin'), upload.single('photo'), async (req, res) => {
   try {
     console.log('POST /user')
     const schema = Joi.object().options({ abortEarly: false }).keys({
@@ -105,7 +105,7 @@ router.post('/', requireAuth('admin'), upload.single('file'), async (req, res) =
   }
 })
 
-router.put('/:id', requireAuth(), upload.single('file'), async (req, res) => {
+router.put('/:id', requireAuth(), upload.single('photo'), async (req, res) => {
   try {
     console.log('PUT /user')
     const schemaParams = Joi.object().options({ abortEarly: false}).keys({
@@ -119,13 +119,13 @@ router.put('/:id', requireAuth(), upload.single('file'), async (req, res) => {
     }
 
     const schemaBody = Joi.object().options({ abortEarly: false }).keys({
-      login: Joi.string().email().required(),
-      password: Joi.string().regex(/^[a-zA-Z0-9]{6,20}$/).required(),
+      login: Joi.string().email().empty('').required(),
+      password: Joi.string().regex(/^[a-zA-Z0-9]{6,20}$/).empty('').allow(null),
       name: Joi.string().required(),
       fullName: Joi.string().required(),
       registerNumber: Joi.string().required(),
       birthDate: Joi.date().allow(null),
-      role: Joi.string().allow(null),
+      role: Joi.string().empty('').allow(null),
       photo: Joi.any().allow(null),
       active: Joi.boolean().required()
     })
@@ -147,8 +147,8 @@ router.put('/:id', requireAuth(), upload.single('file'), async (req, res) => {
       body.value.role,
       body.value.active
     )
-    uploadPhoto(req.photo, user)
-    await updatePhoto (req.file ? '${process.env.API_DATA}/${user}/photo.jpg' : null, user)
+    uploadPhoto(req.file, user)
+    await updatePhoto (req.file ? `${process.env.API_DATA}/${user}/profile.jpg` : null, user)
     res.send(true)
   } catch (error) {
     console.error(error)

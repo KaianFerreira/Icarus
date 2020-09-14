@@ -31,7 +31,7 @@
                     <v-row>
                       <v-col>
                         <v-text-field
-                          label="Login"
+                          label="Email"
                           name="login"
                           type="text"
                           v-model="login"

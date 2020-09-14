@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { setToken, removeToken } from '../libs/token'
 import router from '../router'
+import { get as getUser } from '../api/user'
 
 Vue.use(Vuex)
 
@@ -24,8 +25,9 @@ export default new Vuex.Store({
       setTimeout(() => { store.commit('loaded', true) }, 0)
     },
     async signIn (store, data) {
-      store.commit('user', data.user)
       setToken(data.token)
+      const userDetails = await getUser(data.user.id)
+      store.commit('user', userDetails)
       const path = window.location.pathname
       if (data.user.role === 'admin' && !path.startsWith('/admin')) router.replace('/admin')
       if (data.user.role === 'user' && !path.startsWith('/user')) router.replace('user')
