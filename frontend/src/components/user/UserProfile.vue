@@ -9,7 +9,7 @@
                 <div>
                   <v-row>
                     <v-col class="d-flex align-center">
-                      <div @click="changeImage" class="image-upload primary">
+                      <div @click="changeImage" class="image-upload teal">
                         <img v-if="photo" :src="photo"/>
                         <input ref="fileUpload" type="file" accept="image/jpeg" @change="uploadImage($event.target.files[0])">
                       </div>
@@ -137,6 +137,7 @@ import { uploadImage } from '../../tools'
         this.loading = false
       },
       async save () {
+        this.loading = true
         await update(
           this.user.id,
           this.name,
@@ -149,6 +150,8 @@ import { uploadImage } from '../../tools'
           this.login,
           this.password
         )
+        this.loading = false
+        this.$forceUpdate()
       },
       async cancel () {
         await this.getData()

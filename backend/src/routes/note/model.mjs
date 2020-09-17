@@ -9,7 +9,8 @@ const getAll = async () => {
       'note.subtitle',
       'note.text',
       'note.signed',
-      'user_details.name as user'
+      'user_details.name as user',
+      'user_details.photo as userPhoto'
     )
 }
 
@@ -22,7 +23,8 @@ const getAllAssigned = async () => {
     'note.subtitle',
     'note.text',
     'note.signed',
-    'user_details.name as user'
+    'user_details.name as user',
+    'user_details.photo as userPhoto'
     )
   .where('note.signed', true)
 }
@@ -44,7 +46,8 @@ const getUser = async (user) => {
       'note.subtitle',
       'note.text',
       'note.signed',
-      'user_details.name as user'
+      'user_details.name as user',
+      'user_details.photo as userPhoto'
     )
     .where('note.user', user)
 }

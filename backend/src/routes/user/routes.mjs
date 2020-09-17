@@ -2,7 +2,6 @@ import express from 'express'
 import Joi from 'joi'
 import multer from 'multer'
 import fs from 'fs'
-import path from 'path'
 
 import requireAuth from '../config/auth/requireAuth.mjs'
 import {

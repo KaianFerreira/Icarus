@@ -1,6 +1,6 @@
 <template>
   <section class="container d-flex justify-center">
-    <div class="content">
+    <div class="content"  v-if="loaded">
       <v-row class="card d-flex flex-column">
         <v-col>
           <v-card
@@ -41,18 +41,27 @@
                   ['Insira um texto'] : []"                
               ></v-textarea>
             </v-card-text>
+            <v-divider></v-divider>
             <v-card-actions>
               <div class="d-flex justify-space-between" style="width: 100%">
-                <v-btn text disabled>
-                  {{ user.name }}
-                </v-btn>
-                <v-btn 
-                  text
-                  @click="remove"
-                  v-if="id !== 'new'"
-                >
-                  Remover
-                </v-btn>
+                <v-list-item class="grow">
+                  <v-list-item-avatar color="grey darken-3">
+                    <v-img
+                      class="elevation-6"
+                      :src="user.photo ? user.photo : 'https://randomuser.me/api/portraits/men/85.jpg'"
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ user.name }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-btn 
+                    text
+                    @click="remove"
+                    v-if="id !== 'new'"
+                  >
+                    Remover
+                  </v-btn>
+                </v-list-item>
               </div>
             </v-card-actions>
           </v-card>
@@ -92,7 +101,7 @@
   export default {
     props: ['id'],
     computed: {
-      ...mapState(['user'])
+      ...mapState(['user', 'loaded'])
     },
     data () {
       return {

@@ -13,7 +13,7 @@
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="user.photo"></v-img>
+          <v-img :src="user.photo ? user.photo : 'https://randomuser.me/api/portraits/men/85.jpg'"></v-img>
         </v-list-item-avatar>
         <v-list-item-title>{{ user.name }}</v-list-item-title>
       </v-list-item>

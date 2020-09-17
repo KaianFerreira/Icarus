@@ -27,9 +27,18 @@
               <v-card-subtitle>{{ card.subtitle }}</v-card-subtitle>
               
               <v-card-text>{{ card.text }}</v-card-text>
-
+              <v-divider></v-divider>
               <v-card-actions>
-                <v-btn text disabled>{{ card.user }}</v-btn>
+                <v-list-item class="grow">
+                  <v-list-item-avatar color="grey darken-">
+                    <v-img
+                      :src="card.userPhoto ? card.userPhoto : 'https://randomuser.me/api/portraits/men/85.jpg'"
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ card.user }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </v-card-actions>
             </v-card>
           </v-col>

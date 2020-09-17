@@ -24,13 +24,22 @@
               <v-card-subtitle>{{ card.subtitle }}</v-card-subtitle>
               
               <v-card-text>{{ card.text }}</v-card-text>
-
+              <v-divider></v-divider>
               <v-card-actions>
-                <v-btn text disabled>{{ card.user }}</v-btn>
+                <v-list-item class="grow">
+                  <v-list-item-avatar color="grey darken-">
+                    <v-img
+                      :src="card.userPhoto ? card.userPhoto : 'https://randomuser.me/api/portraits/men/85.jpg'"
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ card.user }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </v-card-actions>
             </v-card>
-            <v-overlay v-if="selectedCard" :value="selectedCard">
-              <v-row class="card modal d-flex flex-column">
+            <v-overlay v-if="selectedCard" :value="selectedCard" class="grow">
+              <v-row class="card modal">
                 <v-col>
                   <v-card
                     :color="selectedCard.signed ? 'blue' : 'teal'"
@@ -47,17 +56,25 @@
                     <v-card-text>
                       {{ selectedCard.text }}
                     </v-card-text>
+                    <v-divider></v-divider>
                     <v-card-actions>
                       <div class="d-flex justify-space-between" style="width: 100%">
-                        <v-btn text disabled>
-                          {{ selectedCard.user }}
-                        </v-btn>
-                        <v-btn 
-                          text
-                          @click="remove(selectedCard.id)"
-                        >
-                          Remover
-                        </v-btn>
+                        <v-list-item class="grow">
+                          <v-list-item-avatar color="grey darken-">
+                            <v-img
+                              :src="selectedCard.userPhoto ? selectedCard.userPhoto : 'https://randomuser.me/api/portraits/men/85.jpg'"
+                            ></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>{{ selectedCard.user }}</v-list-item-title>
+                          </v-list-item-content>
+                          <v-btn 
+                            text
+                            @click="remove(selectedCard.id)"
+                          >
+                            <v-icon>mdi-delete</v-icon>
+                          </v-btn>
+                        </v-list-item>
                       </div>
                     </v-card-actions>
                   </v-card>
@@ -135,9 +152,13 @@
     margin: 12px 0px !important;
     margin-bottom: 12px;
   }
-  .modal {
-    padding-left: 56px;
+  .card {
+    .modal {
+      padding-left: 56px;
+      width: 90vw;
+    }
   }
+
   @media screen and (min-width: 768px) {
     .content {
       width: 80vw !important;
@@ -149,9 +170,6 @@
     }
     .card {
       width: 90%;
-      .modal {
-        min-width: 500px;
-      }
     }
   }
 </style>

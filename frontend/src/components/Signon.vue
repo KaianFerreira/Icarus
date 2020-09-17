@@ -23,7 +23,6 @@
               >
                 <v-toolbar-title>Cadastro</v-toolbar-title>
                 <v-spacer></v-spacer>
-
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -88,6 +87,10 @@
                           :error-messages="errors.indexOf('registerNumber') > - 1 ? 
                             ['CPF inválido'] : []"
                         ></v-text-field>
+                        <v-input
+                          :error-messages="errors.indexOf('Internal error') > - 1 ? 
+                            ['Erro interno'] : []"
+                        ></v-input>
                       </v-col>
                       <v-col>
                         <v-text-field
@@ -148,11 +151,10 @@
           this.$router.push('/signin')
         } catch (error) {
           const data = error.response ? error.response.data : {}
-          console.error(error)
-          if (data.error === 'Validation error') {
-            this.errors = data.fields
-          }
-          if (data.error === 'User already exists') this.errors = ['exists']
+          console.error(data)
+          if (data.error === 'Validation error') this.errors = data.fields
+          else if (data.error === 'User already exists') this.errors = ['exists']
+          else this.errors = ['Internal error']
         }
         this.loading = false
       }
